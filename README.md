@@ -28,6 +28,11 @@
 
 ## 📷 스크린샷
 
+As-Is:
+![캐스팅보드_(단순ver) 데스노트](https://github.com/user-attachments/assets/b47c7fb8-be8b-4ccc-aa6e-6f57f456d8c7)
+
+
+To-Be:
 <img width="1072" height="946" alt="image" src="https://github.com/user-attachments/assets/7d6d69e3-806b-458b-b466-d7ce211c4f87" />
 <img width="1084" height="843" alt="image" src="https://github.com/user-attachments/assets/f804719e-b731-4422-8522-c76ff33642f5" />
 
