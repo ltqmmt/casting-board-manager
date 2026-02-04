@@ -33,6 +33,4 @@
 
 MIT License
 
-## 🙏 감사
-
-Made with ❤️ using Claude AI
+## 🙏 thanks
