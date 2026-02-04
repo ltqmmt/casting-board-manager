@@ -1,4 +1,5 @@
 # casting-board-manager
+
 # 🎭 AI 캐스팅 보드 자동 관리 시스템
 
 뮤지컬/공연 캐스팅 보드 이미지를 업로드하면 AI가 자동으로 분석하여 배우별 출연 일정을 관리할 수 있는 웹 애플리케이션입니다.
@@ -34,3 +35,10 @@
 MIT License
 
 ## 🙏 thanks
+
+my-casting-app/
+├── index.html # 기존 HTML 파일
+├── api/
+│ └── analyze.js # Serverless Function
+├── vercel.json # Vercel 설정 (선택)
+└── package.json # 의존성 관리

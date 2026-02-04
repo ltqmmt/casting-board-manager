@@ -1,16 +1,56 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>캐스팅 보드 자동 관리 시스템</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    * { font-family: 'Noto Sans KR', sans-serif; }
+    * {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(39, 39, 42, 0.5);
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(20, 184, 166, 0.3);
+      border-radius: 10px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(20, 184, 166, 0.5);
+    }
+
+    .table-cell-highlight {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .table-cell-highlight::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(20, 184, 166, 0.1) 0%, rgba(20, 184, 166, 0.3) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .table-cell-highlight.active::before {
+      opacity: 1;
+    }
+
     table * {
       writing-mode: horizontal-tb !important;
       text-orientation: mixed !important;
@@ -20,103 +60,440 @@
 
 <body class="min-h-screen bg-zinc-950 text-white">
 
-<div class="max-w-5xl mx-auto p-8">
-  <h1 class="text-4xl font-black text-center mb-8">캐스팅 보드 자동 관리</h1>
-
-  <!-- 업로드 -->
-  <div id="uploadSection" class="text-center">
-    <input type="file" id="fileInput" accept="image/*" class="hidden">
-    <label for="fileInput" class="cursor-pointer px-6 py-4 bg-teal-500 rounded-xl font-bold">
-      이미지 업로드
-    </label>
+  <div class="fixed inset-0 opacity-5 pointer-events-none">
+    <div class="absolute inset-0"
+      style="background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.02) 10px, rgba(255,255,255,0.02) 20px)">
+    </div>
   </div>
 
-  <!-- 로딩 -->
-  <div id="loadingSection" class="hidden text-center mt-10">
-    <p class="text-teal-400 font-bold">AI가 이미지 분석 중...</p>
+  <div class="relative">
+    <header class="border-b border-teal-700/30 bg-zinc-950/50 backdrop-blur-sm">
+      <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="text-center">
+          <h1 class="text-5xl md:text-6xl font-black mb-3 tracking-tight">
+            캐스팅 보드 자동 관리
+          </h1>
+          <p class="text-zinc-400 text-lg font-medium">AI Casting Schedule Manager</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+      <div id="uploadSection">
+        <div class="max-w-3xl mx-auto">
+          <div id="dropZone"
+            class="relative border-2 border-dashed border-teal-700/50 bg-zinc-900/50 hover:border-teal-500 hover:bg-zinc-900/70 rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer">
+            <div class="space-y-6">
+              <div class="flex justify-center">
+                <div class="p-6 bg-teal-500/10 rounded-2xl border border-teal-500/20">
+                  <svg class="w-16 h-16 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 보드 이미지 업로드</h3>
+                <p class="text-zinc-400 mb-6">드래그 앤 드롭 또는 클릭하여 이미지를 업로드하세요</p>
+              </div>
+              <label class="inline-block">
+                <input type="file" id="fileInput" accept="image/*" class="hidden" />
+                <span
+                  class="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105 inline-flex items-center gap-3">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  이미지 선택
+                </span>
+              </label>
+              <p class="text-xs text-zinc-500 mt-4">지원 형식: JPG, PNG, GIF, WEBP</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingSection" class="hidden">
+        <div class="max-w-3xl mx-auto">
+          <div class="relative border-2 border-dashed border-teal-500 bg-teal-500/10 rounded-2xl p-16 text-center">
+            <div class="space-y-6">
+              <div class="flex justify-center">
+                <svg class="w-20 h-20 text-teal-500 animate-pulse" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-2xl font-semibold text-teal-400 mb-2">AI가 캐스팅 보드 분석 중...</h3>
+                <p class="text-zinc-400">배우와 출연 일정을 읽고 있습니다</p>
+              </div>
+              <div class="flex justify-center gap-2">
+                <div class="w-3 h-3 bg-teal-500 rounded-full animate-bounce"></div>
+                <div class="w-3 h-3 bg-teal-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                <div class="w-3 h-3 bg-teal-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dataSection" class="hidden">
+        <div class="mb-8 bg-zinc-900/50 backdrop-blur border border-teal-700/30 rounded-lg p-6">
+          <div class="flex flex-wrap gap-4 items-center">
+            <div class="flex items-center gap-2 text-teal-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              <span class="font-bold">배우 필터:</span>
+            </div>
+
+            <div class="relative flex-1 min-w-[200px] max-w-xs">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input type="text" id="searchInput" placeholder="배우 검색..."
+                class="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-md text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors" />
+            </div>
+
+            <div id="selectedActorBadge"
+              class="hidden flex items-center gap-2 px-4 py-2 bg-teal-500/20 border border-teal-500 rounded-md">
+              <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span id="selectedActorName" class="font-semibold text-teal-300"></span>
+              <span id="selectedActorCount" class="text-teal-400 text-sm"></span>
+              <button id="clearFilterBtn" class="ml-2 hover:bg-teal-500/30 rounded-full p-1 transition-colors">
+                <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <span id="filterHint" class="text-zinc-500 text-sm">배우를 선택하면 해당 출연 회차만 표시됩니다</span>
+
+            <button id="resetBtn"
+              class="ml-auto px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-md text-zinc-300 font-medium transition-all flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              새로 시작
+            </button>
+          </div>
+
+          <div id="actorButtons" class="mt-4 flex flex-wrap gap-2"></div>
+        </div>
+
+        <div id="showInfo" class="hidden mb-6 p-4 bg-teal-500/10 border border-teal-500/30 rounded-lg">
+          <div class="flex items-center gap-2 text-teal-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span id="showInfoText" class="font-semibold"></span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg border-2 border-teal-700/50 shadow-2xl">
+          <table id="castingTable" class="w-full">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="mt-6 text-center">
+          <p id="scheduleNote" class="text-zinc-500 text-sm"></p>
+        </div>
+
+        <div id="statsSection" class="hidden mt-8 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      </div>
+    </main>
   </div>
 
-  <!-- 결과 -->
-  <div id="dataSection" class="hidden mt-10">
-    <table class="w-full border border-zinc-700">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-</div>
+  <script>
+    let castingData = null;
+    let selectedActor = null;
+    let allActors = [];
+    let actorStats = {};
 
-<script>
-let castingData = null;
+    const uploadSection = document.getElementById('uploadSection');
+    const loadingSection = document.getElementById('loadingSection');
+    const dataSection = document.getElementById('dataSection');
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const searchInput = document.getElementById('searchInput');
+    const actorButtons = document.getElementById('actorButtons');
+    const selectedActorBadge = document.getElementById('selectedActorBadge');
+    const selectedActorName = document.getElementById('selectedActorName');
+    const selectedActorCount = document.getElementById('selectedActorCount');
+    const clearFilterBtn = document.getElementById('clearFilterBtn');
+    const filterHint = document.getElementById('filterHint');
+    const showInfo = document.getElementById('showInfo');
+    const showInfoText = document.getElementById('showInfoText');
+    const tableHead = document.getElementById('tableHead');
+    const tableBody = document.getElementById('tableBody');
+    const scheduleNote = document.getElementById('scheduleNote');
+    const statsSection = document.getElementById('statsSection');
+    const resetBtn = document.getElementById('resetBtn');
 
-const uploadSection = document.getElementById("uploadSection");
-const loadingSection = document.getElementById("loadingSection");
-const dataSection = document.getElementById("dataSection");
-const fileInput = document.getElementById("fileInput");
-const tableHead = document.getElementById("tableHead");
-const tableBody = document.getElementById("tableBody");
-
-fileInput.addEventListener("change", e => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    const base64 = e.target.result.split(",")[1];
-    processImage(base64);
-  };
-  reader.readAsDataURL(file);
-});
-
-async function processImage(imageBase64) {
-  uploadSection.classList.add("hidden");
-  loadingSection.classList.remove("hidden");
-
-  try {
-    const res = await fetch("/api/analyze", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ imageBase64 })
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleFileUpload(file);
     });
 
-    if (!res.ok) throw new Error("API 실패");
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-teal-500', 'bg-teal-500/10', 'scale-105');
+    });
 
-    const data = await res.json();
-    const text = data.content.map(v => v.text || "").join("\n");
-    const clean = text.replace(/```json|```/g, "").trim();
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-teal-500', 'bg-teal-500/10', 'scale-105');
+    });
 
-    castingData = JSON.parse(clean);
-    renderTable();
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-teal-500', 'bg-teal-500/10', 'scale-105');
+      const file = e.dataTransfer.files[0];
+      if (file) handleFileUpload(file);
+    });
 
-    loadingSection.classList.add("hidden");
-    dataSection.classList.remove("hidden");
+    async function handleFileUpload(file) {
+      if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 업로드 가능합니다.');
+        return;
+      }
 
-  } catch (err) {
-    console.error(err);
-    alert("이미지 분석 실패");
-    location.reload();
-  }
-}
+      uploadSection.classList.add('hidden');
+      loadingSection.classList.remove('hidden');
 
-function renderTable() {
-  tableHead.innerHTML = `
-    <tr class="bg-zinc-800">
-      <th class="p-3">날짜</th>
-      <th class="p-3">요일</th>
-      <th class="p-3">시간</th>
-      ${castingData.roles.map(r => `<th class="p-3">${r}</th>`).join("")}
-    </tr>
-  `;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const base64Data = e.target.result.split(',')[1];
+        await processImage(base64Data);
+      };
+      reader.readAsDataURL(file);
+    }
 
-  tableBody.innerHTML = castingData.schedule.map(row => `
-    <tr class="border-t border-zinc-700">
-      <td class="p-3 text-center">${row.date}</td>
-      <td class="p-3 text-center">${row.day}</td>
-      <td class="p-3 text-center">${row.time}</td>
-      ${row.cast.map(a => `<td class="p-3 text-center">${a}</td>`).join("")}
-    </tr>
-  `).join("");
-}
-</script>
+    async function processImage(imageData) {
+      try {
+        // ✅ Vercel Serverless Function 호출
+        const response = await fetch("/api/analyze", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageData: imageData
+          })
+        });
 
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error Response:", errorData);
+          throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("API Response:", data);
+
+        if (!data.content || !Array.isArray(data.content)) {
+          throw new Error("응답 형식이 올바르지 않습니다.");
+        }
+
+        const text = data.content.map(item => item.text || "").join("\n").trim();
+        const cleanText = text.replace(/```json|```/g, "").trim();
+        castingData = JSON.parse(cleanText);
+
+        processData();
+        showData();
+      } catch (error) {
+        console.error("Processing error:", error);
+        alert(`이미지 처리 중 오류가 발생했습니다.\n\n에러: ${error.message}\n\n개발자 콘솔을 확인해주세요.`);
+        reset();
+      }
+    }
+
+
+    function processData() {
+      const actorsSet = new Set();
+      castingData.schedule.forEach(show => {
+        show.cast.forEach(actor => actorsSet.add(actor));
+      });
+      allActors = Array.from(actorsSet).sort();
+
+      actorStats = {};
+      allActors.forEach(actor => {
+        actorStats[actor] = castingData.schedule.filter(show =>
+          show.cast.includes(actor)
+        ).length;
+      });
+    }
+
+    function showData() {
+      loadingSection.classList.add('hidden');
+      dataSection.classList.remove('hidden');
+
+      renderActorButtons();
+      renderTable();
+
+      if (castingData.note) {
+        scheduleNote.textContent = castingData.note;
+      }
+    }
+
+    function renderActorButtons(searchQuery = '') {
+      const filteredActors = allActors.filter(actor =>
+        actor.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      actorButtons.innerHTML = filteredActors.map(actor => `
+        <button
+          onclick="selectActor('${actor}')"
+          class="px-4 py-2 rounded-md font-bold transition-all ${
+            selectedActor === actor
+              ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/30'
+              : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
+          }"
+        >
+          ${actor}
+          <span class="ml-2 text-xs font-semibold opacity-70">(${actorStats[actor]})</span>
+        </button>
+      `).join('');
+    }
+
+    function selectActor(actorName) {
+      selectedActor = selectedActor === actorName ? null : actorName;
+      renderActorButtons(searchInput.value);
+      renderTable();
+      updateFilterUI();
+    }
+
+    function updateFilterUI() {
+      if (selectedActor) {
+        selectedActorBadge.classList.remove('hidden');
+        filterHint.classList.add('hidden');
+        selectedActorName.textContent = selectedActor;
+
+        const count = castingData.schedule.filter(show =>
+          show.cast.includes(selectedActor)
+        ).length;
+        selectedActorCount.textContent = `(${count}회)`;
+
+        showInfo.classList.remove('hidden');
+        showInfoText.textContent = `${selectedActor} 출연 일정: 총 ${count}회`;
+
+        renderStats();
+      } else {
+        selectedActorBadge.classList.add('hidden');
+        filterHint.classList.remove('hidden');
+        showInfo.classList.add('hidden');
+        statsSection.classList.add('hidden');
+      }
+    }
+
+    function renderTable() {
+      const filteredSchedule = selectedActor ?
+        castingData.schedule.filter(show => show.cast.includes(selectedActor)) :
+        castingData.schedule;
+
+      tableHead.innerHTML = `
+        <tr class="bg-teal-800/80 backdrop-blur">
+          <th class="px-4 py-4 text-center font-black text-base tracking-tight border-r border-teal-700/50 whitespace-nowrap">날짜</th>
+          <th class="px-4 py-4 text-center font-black text-base tracking-tight border-r border-teal-700/50 whitespace-nowrap">요일</th>
+          <th class="px-4 py-4 text-center font-black text-base tracking-tight border-r border-teal-700/50 whitespace-nowrap">시간</th>
+          ${castingData.roles.map(role => `
+            <th class="px-4 py-4 text-center font-black text-base tracking-tight border-r border-teal-700/50 last:border-r-0 whitespace-nowrap">${role}</th>
+          `).join('')}
+        </tr>
+      `;
+
+      tableBody.innerHTML = filteredSchedule.map(show => `
+        <tr class="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors">
+          <td class="px-4 py-4 border-r border-zinc-800 bg-zinc-900/30 whitespace-nowrap text-center">
+            <div class="text-base font-black ${getDateColor(show.date)}">${show.date}</div>
+          </td>
+          <td class="px-4 py-4 border-r border-zinc-800 bg-zinc-900/30 whitespace-nowrap text-center">
+            <div class="text-base font-semibold text-zinc-300">${show.day}</div>
+          </td>
+          <td class="px-4 py-4 border-r border-zinc-800 bg-zinc-900/30 whitespace-nowrap text-center">
+            <div class="text-base font-semibold text-zinc-300">${show.time}</div>
+          </td>
+          ${show.cast.map((actor, castIdx) => `
+            <td class="px-4 py-4 text-center border-r border-zinc-800 last:border-r-0 transition-all table-cell-highlight whitespace-nowrap ${
+              isActorInShow(show, castIdx) ? 'active bg-teal-500/30 font-black text-teal-300 ring-2 ring-inset ring-teal-500/50' : 'text-zinc-300 font-semibold'
+            }">
+              <button onclick="selectActor('${actor}')" class="hover:text-teal-400 transition-colors w-full">
+                ${actor}
+              </button>
+            </td>
+          `).join('')}
+        </tr>
+      `).join('');
+    }
+
+    function getDateColor(date) {
+      if (date.includes('토')) return 'text-cyan-400';
+      if (date.includes('일')) return 'text-red-400';
+      return 'text-white';
+    }
+
+    function isActorInShow(show, roleIndex) {
+      return selectedActor && show.cast[roleIndex] === selectedActor;
+    }
+
+    function renderStats() {
+      const filteredSchedule = castingData.schedule.filter(show =>
+        show.cast.includes(selectedActor)
+      );
+
+      statsSection.classList.remove('hidden');
+      statsSection.innerHTML = `
+        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
+          <div class="text-zinc-400 text-sm font-semibold mb-2">총 출연 횟수</div>
+          <div class="text-3xl font-black text-teal-400">${filteredSchedule.length}회</div>
+        </div>
+        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
+          <div class="text-zinc-400 text-sm font-semibold mb-2">첫 공연</div>
+          <div class="text-xl font-black text-white">${filteredSchedule[0]?.date} ${filteredSchedule[0]?.time}</div>
+        </div>
+        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
+          <div class="text-zinc-400 text-sm font-semibold mb-2">마지막 공연</div>
+          <div class="text-xl font-black text-white">${filteredSchedule[filteredSchedule.length - 1]?.date} ${filteredSchedule[filteredSchedule.length - 1]?.time}</div>
+        </div>
+      `;
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      renderActorButtons(e.target.value);
+    });
+
+    clearFilterBtn.addEventListener('click', () => {
+      selectedActor = null;
+      renderActorButtons(searchInput.value);
+      renderTable();
+      updateFilterUI();
+    });
+
+    resetBtn.addEventListener('click', reset);
+
+    function reset() {
+      castingData = null;
+      selectedActor = null;
+      allActors = [];
+      actorStats = {};
+      uploadSection.classList.remove('hidden');
+      loadingSection.classList.add('hidden');
+      dataSection.classList.add('hidden');
+      fileInput.value = '';
+      searchInput.value = '';
+    }
+  </script>
 </body>
+
 </html>
