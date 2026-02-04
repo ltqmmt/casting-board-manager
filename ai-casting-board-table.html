@@ -291,29 +291,15 @@
     // AI 이미지 처리
     async function processImage(imageData) {
       try {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "claude-sonnet-4-20250514",
-            max_tokens: 2000,
-            messages: [
-              {
-                role: "user",
-                content: [
-                  {
-                    type: "image",
-                    source: {
-                      type: "base64",
-                      media_type: "image/jpeg",
-                      data: imageData
-                    }
-                  },
-                  {
-                    type: "text",
-                    text: `이 이미지는 공연/뮤지컬/드라마 캐스팅 보드입니다. 다음 정보를 정확하게 추출해주세요:
+        const response = await fetch("/api/analyze", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    imageBase64: imageData
+  })
+});
 
 1. 공연 제목 (있다면)
 2. 공연 기간 (있다면)
