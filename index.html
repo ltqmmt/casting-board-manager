@@ -96,17 +96,28 @@
                 <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 보드 이미지 업로드</h3>
                 <p class="text-zinc-400 mb-6">드래그 앤 드롭 또는 클릭하여 이미지를 업로드하세요</p>
               </div>
-              <label class="inline-block">
-                <input type="file" id="fileInput" accept="image/*" class="hidden" />
-                <span
-                  class="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105 inline-flex items-center gap-3">
+              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <label class="inline-block">
+                  <input type="file" id="fileInput" accept="image/*" class="hidden" />
+                  <span
+                    class="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105 inline-flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    이미지 선택
+                  </span>
+                </label>
+                <button
+                  onclick="loadSampleData()"
+                  class="px-8 py-4 bg-zinc-700 hover:bg-zinc-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-zinc-700/20 hover:shadow-zinc-600/40 hover:scale-105 inline-flex items-center gap-3">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
-                  이미지 선택
-                </span>
-              </label>
+                  예시 데이터 로드
+                </button>
+              </div>
               <p class="text-xs text-zinc-500 mt-4">지원 형식: JPG, PNG, GIF, WEBP</p>
             </div>
           </div>
@@ -240,6 +251,67 @@
     const scheduleNote = document.getElementById('scheduleNote');
     const statsSection = document.getElementById('statsSection');
     const resetBtn = document.getElementById('resetBtn');
+
+    // ✨ 예시 데이터 로드 함수
+    function loadSampleData() {
+      castingData = {
+        "roles": ["엘사", "안나", "크리스토프"],
+        "schedule": [
+          {
+            "date": "03.15 (금)",
+            "day": "금",
+            "time": "14:00",
+            "cast": ["김민수", "이지은", "박서준"]
+          },
+          {
+            "date": "03.15 (금)",
+            "day": "금",
+            "time": "19:00",
+            "cast": ["최우식", "이지은", "정해인"]
+          },
+          {
+            "date": "03.16 (토)",
+            "day": "토",
+            "time": "14:00",
+            "cast": ["김민수", "아이유", "박서준"]
+          },
+          {
+            "date": "03.16 (토)",
+            "day": "토",
+            "time": "19:00",
+            "cast": ["최우식", "아이유", "정해인"]
+          },
+          {
+            "date": "03.17 (일)",
+            "day": "일",
+            "time": "15:00",
+            "cast": ["김민수", "이지은", "정해인"]
+          },
+          {
+            "date": "03.17 (일)",
+            "day": "일",
+            "time": "19:00",
+            "cast": ["최우식", "아이유", "박서준"]
+          },
+          {
+            "date": "03.18 (월)",
+            "day": "월",
+            "time": "14:00",
+            "cast": ["김민수", "이지은", "박서준"]
+          },
+          {
+            "date": "03.18 (월)",
+            "day": "월",
+            "time": "19:00",
+            "cast": ["최우식", "아이유", "정해인"]
+          }
+        ],
+        "note": "예시 데이터입니다. 실제 캐스팅 보드 이미지를 업로드하세요."
+      };
+
+      processData();
+      showData();
+    }
 
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
