@@ -47,7 +47,6 @@ export default async function handler(req, res) {
                 text: `이 이미지는 공연/뮤지컬/드라마 캐스팅 보드입니다.
 아래 JSON 형식으로만 응답하세요. 다른 텍스트, 설명, 백틱 금지.
 
-다음 JSON 형식으로만 응답해주세요 (다른 텍스트 없이):
 {
   "title": "공연 제목",
   "period": "공연 기간",
