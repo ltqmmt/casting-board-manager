@@ -866,7 +866,7 @@
           throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
         }
 
-        const result = await response.json();
+        const data = await response.json();
         console.log("API Response:", data);
 
         if (!data.content || !Array.isArray(data.content)) {
