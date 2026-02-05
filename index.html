@@ -874,8 +874,10 @@
         }
 
         const text = data.content.map(item => item.text || "").join("\n").trim();
-        const cleanText = text.replace(/```json|```/g, "").trim();
-        tempCastingData = JSON.parse(cleanText);
+        const cleaned = text.replace(/```json|```/g, "").trim();
+
+        const jsonText = extractJSON(cleaned);
+        tempCastingData = JSON.parse(jsonText);
 
         loadingSection.classList.add('hidden');
         showConfirmSection();
