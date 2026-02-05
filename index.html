@@ -87,67 +87,65 @@
         </div>
 
         <!-- 공연 리스트 -->
-        <div id="showsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <!-- 공연 카드들이 여기에 동적으로 추가됩니다 -->
-        </div>
+        <div id="showsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6"></div>
 
         <!-- 빈 상태 -->
-        <div id="emptyState" class="hidden text-center py-20">
-          <div class="inline-block p-8 bg-zinc-900/50 rounded-2xl border border-zinc-800 mb-6">
-            <svg class="w-20 h-20 text-zinc-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-zinc-300 mb-2">등록된 공연이 없습니다</h3>
-          <p class="text-zinc-500 mb-8">첫 번째 캐스팅 스케줄을 추가해보세요!</p>
+        <div id="emptyState" class="text-center py-16">
+          <svg class="w-24 h-24 mx-auto mb-4 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <h3 class="text-xl font-semibold text-zinc-400 mb-2">저장된 공연이 없습니다</h3>
+          <p class="text-zinc-500 mb-6">캐스팅 보드를 업로드하여 첫 공연을 추가하세요</p>
+          <button onclick="showUploadSection()"
+            class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-lg transition-all">
+            + 새 공연 추가
+          </button>
         </div>
 
-        <!-- 공연 추가 버튼 -->
-        <div class="text-center">
+        <!-- 하단 버튼 (공연이 있을 때만 표시) -->
+        <div id="addShowButton" class="hidden flex justify-center gap-4 mt-6">
           <button onclick="showUploadSection()"
-            class="inline-flex items-center gap-3 px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            class="px-6 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
-            원하는 공연이 없나요? 직접 추가하기
+            새 공연 추가
           </button>
         </div>
       </div>
 
-      <!-- 이미지 업로드 화면 -->
+      <!-- 업로드 화면 -->
       <div id="uploadSection" class="hidden">
-        <div class="mb-6 flex items-center justify-between">
-          <button onclick="showHomeSection()"
-            class="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-md text-zinc-300 font-medium transition-all">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            홈으로 돌아가기
-          </button>
-        </div>
-
         <div class="max-w-3xl mx-auto">
+          <div class="mb-6 flex justify-between items-center">
+            <button onclick="showHomeSection()"
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-all inline-flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              돌아가기
+            </button>
+          </div>
+
           <div id="dropZone"
-            class="relative border-2 border-dashed border-teal-700/50 bg-zinc-900/50 hover:border-teal-500 hover:bg-zinc-900/70 rounded-2xl p-16 text-center transition-all duration-300 cursor-pointer">
-            <div class="space-y-6">
+            class="relative border-2 border-dashed border-teal-500 bg-teal-500/10 rounded-2xl p-16 text-center hover:border-teal-400 hover:bg-teal-500/20 transition-all">
+            <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleFileSelect(event)" />
+            <div class="space-y-4">
               <div class="flex justify-center">
-                <div class="p-6 bg-teal-500/10 rounded-2xl border border-teal-500/20">
-                  <svg class="w-16 h-16 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
+                <svg class="w-20 h-20 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
               </div>
               <div>
-                <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 스케줄 이미지 업로드</h3>
-                <p class="text-zinc-400 mb-6">드래그 앤 드롭 또는 클릭하여 이미지를 업로드하세요</p>
+                <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 보드 이미지 업로드</h3>
+                <p class="text-zinc-400">클릭하거나 드래그하여 이미지를 선택하세요</p>
               </div>
-              <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <label class="inline-block">
-                  <input type="file" id="fileInput" accept="image/*" class="hidden" />
-                  <span
-                    class="px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105 inline-flex items-center gap-3">
+              <div class="flex justify-center gap-4">
+                <label for="fileInput"
+                  class="px-8 py-4 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-teal-600/30 hover:shadow-teal-500/50 hover:scale-105 inline-flex items-center gap-3">
+                  <span class="inline-flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -156,7 +154,7 @@
                   </span>
                 </label>
                 <button
-                  onclick="loadSampleData()"
+                  onclick="loadSampleData(event)"
                   class="px-8 py-4 bg-zinc-700 hover:bg-zinc-600 text-white font-semibold rounded-xl cursor-pointer transition-all shadow-lg shadow-zinc-700/20 hover:shadow-zinc-600/40 hover:scale-105 inline-flex items-center gap-3">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -233,6 +231,15 @@
         <div class="bg-zinc-900/50 border border-teal-700/30 rounded-lg p-6 mb-6">
           <p class="text-zinc-400 mb-4">AI가 분석한 내용을 확인하고, 잘못된 부분이 있다면 수정해주세요.</p>
           
+          <!-- 공연명 입력 -->
+          <div class="mb-6">
+            <label class="block text-sm font-bold text-teal-400 mb-3">공연명</label>
+            <input type="text" id="showNameEditInput" 
+              class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors"
+              placeholder="예: 데스노트 더 뮤지컬"
+            />
+          </div>
+
           <!-- 배우 이름 일괄 변경 -->
           <div class="mb-6 p-4 bg-zinc-800/50 border border-zinc-700 rounded-lg">
             <div class="flex items-center gap-2 mb-3">
@@ -285,117 +292,52 @@
               <table class="w-full">
                 <thead class="bg-zinc-800/80">
                   <tr>
-                    <th class="px-3 py-3 text-center text-xs font-bold text-zinc-300 border-r border-zinc-700 w-28">날짜</th>
-                    <th class="px-3 py-3 text-center text-xs font-bold text-zinc-300 border-r border-zinc-700 w-16">요일</th>
-                    <th class="px-3 py-3 text-center text-xs font-bold text-zinc-300 border-r border-zinc-700 w-20">시간</th>
-                    <th class="px-3 py-3 text-center text-xs font-bold text-zinc-300 border-r border-zinc-700">배우 (쉼표 구분)</th>
-                    <th class="px-3 py-3 text-center text-xs font-bold text-zinc-300 w-16">삭제</th>
+                    <th class="px-3 py-2 text-left text-xs font-bold text-zinc-400 border-r border-zinc-700">날짜</th>
+                    <th class="px-3 py-2 text-center text-xs font-bold text-zinc-400 border-r border-zinc-700">요일</th>
+                    <th class="px-3 py-2 text-center text-xs font-bold text-zinc-400 border-r border-zinc-700">시간</th>
+                    <th class="px-3 py-2 text-left text-xs font-bold text-zinc-400 border-r border-zinc-700">배우 (쉼표 구분)</th>
+                    <th class="px-3 py-2 text-center text-xs font-bold text-zinc-400">삭제</th>
                   </tr>
                 </thead>
-                <tbody id="scheduleEditTable" class="divide-y divide-zinc-700">
-                  <!-- 일정 행들이 여기에 동적으로 추가됩니다 -->
-                </tbody>
+                <tbody id="scheduleEditTable"></tbody>
               </table>
             </div>
           </div>
 
-          <!-- 특이사항 수정 -->
+          <!-- 특이사항 -->
           <div class="mt-6">
             <label class="block text-sm font-bold text-teal-400 mb-3">특이사항</label>
-            <textarea id="noteInput" 
-              class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors resize-none"
-              rows="2"
-              placeholder="공지사항이나 특이사항을 입력하세요"
-            ></textarea>
+            <textarea id="noteInput" rows="3" 
+              class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors"
+              placeholder="공연 관련 특이사항을 입력하세요"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- 공연명 입력 모달 -->
-      <div id="saveModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-zinc-900 border-2 border-teal-700/50 rounded-2xl p-8 max-w-md w-full mx-4">
-          <h3 class="text-2xl font-bold text-white mb-2">공연 정보 입력</h3>
-          <p class="text-zinc-400 mb-6">이 캐스팅 스케줄의 공연명을 입력하세요</p>
-          
-          <input 
-            type="text" 
-            id="showNameInput" 
-            placeholder="예: 뮤지컬 레미제라블"
-            class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-teal-500 transition-colors mb-6"
-          />
-          
-          <div class="flex gap-3">
-            <button 
-              onclick="cancelSave()"
-              class="flex-1 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg text-zinc-300 font-semibold transition-all">
-              취소
-            </button>
-            <button 
-              onclick="confirmSave()"
-              class="flex-1 px-6 py-3 bg-teal-500 hover:bg-teal-600 rounded-lg text-white font-semibold transition-all shadow-lg shadow-teal-500/20">
-              저장
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 삭제 확인 모달 -->
-      <div id="deleteModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center">
-        <div class="bg-zinc-900 border-2 border-red-700/50 rounded-2xl p-8 max-w-md w-full mx-4">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="p-3 bg-red-500/10 rounded-full">
-              <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-            </div>
-            <h3 class="text-2xl font-bold text-white">공연 삭제</h3>
-          </div>
-          
-          <p class="text-zinc-300 mb-2">다음 공연을 정말 삭제하시겠습니까?</p>
-          <p id="deleteShowName" class="text-xl font-bold text-red-400 mb-6"></p>
-          <p class="text-sm text-zinc-500 mb-6">이 작업은 되돌릴 수 없습니다.</p>
-          
-          <div class="flex gap-3">
-            <button 
-              onclick="cancelDelete()"
-              class="flex-1 px-6 py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-lg text-zinc-300 font-semibold transition-all">
-              취소
-            </button>
-            <button 
-              onclick="confirmDelete()"
-              class="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg text-white font-semibold transition-all shadow-lg shadow-red-500/20">
-              삭제
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 데이터 섹션 (공연 상세보기) -->
+      <!-- 데이터 표시 화면 -->
       <div id="dataSection" class="hidden">
-        <div class="mb-6 flex items-center justify-between">
-          <button onclick="showHomeSection()"
-            class="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-md text-zinc-300 font-medium transition-all">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-            홈으로 돌아가기
-          </button>
-          
-          <h2 id="currentShowTitle" class="text-3xl font-black text-white"></h2>
-          
-          <div class="flex gap-3">
+        <div class="mb-8 flex items-center justify-between">
+          <div class="flex items-center gap-4">
+            <button onclick="showHomeSection()"
+              class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg transition-all inline-flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+              돌아가기
+            </button>
+            <h2 id="currentShowTitle" class="text-3xl font-black text-white"></h2>
+          </div>
+          <div class="flex gap-2">
             <button id="editShowBtn"
-              class="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 border border-teal-700 rounded-md text-white font-medium transition-all">
+              class="px-4 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-all inline-flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              수정하기
+              수정
             </button>
-            
             <button id="deleteShowBtn"
-              class="flex items-center gap-2 px-4 py-2 bg-red-900/50 hover:bg-red-900/70 border border-red-700 rounded-md text-red-300 font-medium transition-all">
+              class="px-4 py-2 bg-red-900/50 hover:bg-red-900/70 border border-red-700 rounded-lg text-red-300 font-medium transition-all inline-flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -405,8 +347,8 @@
           </div>
         </div>
 
-        <div class="mb-8 bg-zinc-900/50 backdrop-blur border border-teal-700/30 rounded-lg p-6">
-          <div class="flex flex-wrap gap-4 items-center">
+        <div class="mb-6 space-y-4 bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+          <div class="flex items-center gap-4 flex-wrap">
             <div class="flex items-center gap-2 text-teal-400">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -431,8 +373,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-              <span id="selectedActorName" class="font-semibold text-teal-300"></span>
-              <span id="selectedActorCount" class="text-teal-400 text-sm"></span>
+              <span id="selectedActorsText" class="font-semibold text-teal-300"></span>
               <button id="clearFilterBtn" class="ml-2 hover:bg-teal-500/30 rounded-full p-1 transition-colors">
                 <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -440,7 +381,7 @@
               </button>
             </div>
 
-            <span id="filterHint" class="text-zinc-500 text-sm">배우를 선택하면 해당 출연 회차만 표시됩니다</span>
+            <span id="filterHint" class="text-zinc-500 text-sm">배우를 선택하면 해당 출연 회차만 표시됩니다 (중복 선택 가능)</span>
           </div>
 
           <div id="actorButtons" class="mt-4 flex flex-wrap gap-2"></div>
@@ -463,19 +404,77 @@
           </table>
         </div>
 
+        <!-- 새 스케줄 추가 버튼 -->
+        <div class="mt-8 text-center">
+          <button onclick="addMoreSchedule()"
+            class="px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-teal-600/30 hover:shadow-teal-500/50 transition-all hover:scale-105 inline-flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            </svg>
+            <span>새로운 스케줄이 올라왔나요? 이미지 업로드하기</span>
+          </button>
+        </div>
+
         <div class="mt-6 text-center">
           <p id="scheduleNote" class="text-zinc-500 text-sm"></p>
         </div>
 
-        <div id="statsSection" class="hidden mt-8 grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        <div id="statsSection" class="hidden mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"></div>
       </div>
     </main>
+  </div>
+
+  <!-- 저장 모달 -->
+  <div id="saveModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-zinc-900 border-2 border-teal-700/50 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+      <h3 class="text-2xl font-black text-white mb-4">공연명 입력</h3>
+      <input type="text" id="showNameInput" placeholder="예: 데스노트 더 뮤지컬"
+        class="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:border-teal-500 mb-6" />
+      <div class="flex gap-3">
+        <button onclick="cancelSave()"
+          class="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-lg transition-all">
+          취소
+        </button>
+        <button onclick="confirmSave()"
+          class="flex-1 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white font-semibold rounded-lg transition-all">
+          저장
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 삭제 확인 모달 -->
+  <div id="deleteModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-zinc-900 border-2 border-red-700/50 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+      <div class="flex items-center gap-3 mb-4">
+        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <h3 class="text-2xl font-black text-white">공연 삭제</h3>
+      </div>
+      <p class="text-zinc-300 mb-6">
+        <span id="deleteShowName" class="font-bold text-white"></span> 공연을 정말 삭제하시겠습니까?<br />
+        <span class="text-sm text-zinc-500">이 작업은 되돌릴 수 없습니다.</span>
+      </p>
+      <div class="flex gap-3">
+        <button onclick="cancelDelete()"
+          class="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-lg transition-all">
+          취소
+        </button>
+        <button onclick="confirmDelete()"
+          class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg transition-all">
+          삭제
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
     // ===== 기존 코드 변수들 =====
     let castingData = null;
-    let selectedActor = null;
+    let selectedActors = []; // 🆕 배열로 변경 (중복 선택)
     let allActors = [];
     let actorStats = {};
 
@@ -500,8 +499,7 @@
     const searchInput = document.getElementById('searchInput');
     const actorButtons = document.getElementById('actorButtons');
     const selectedActorBadge = document.getElementById('selectedActorBadge');
-    const selectedActorName = document.getElementById('selectedActorName');
-    const selectedActorCount = document.getElementById('selectedActorCount');
+    const selectedActorsText = document.getElementById('selectedActorsText');
     const clearFilterBtn = document.getElementById('clearFilterBtn');
     const filterHint = document.getElementById('filterHint');
     const showInfo = document.getElementById('showInfo');
@@ -514,6 +512,7 @@
     const editShowBtn = document.getElementById('editShowBtn');
     const deleteShowBtn = document.getElementById('deleteShowBtn');
     const showNameInput = document.getElementById('showNameInput');
+    const showNameEditInput = document.getElementById('showNameEditInput');
     const deleteShowName = document.getElementById('deleteShowName');
     const rolesInput = document.getElementById('rolesInput');
     const scheduleEditTable = document.getElementById('scheduleEditTable');
@@ -523,98 +522,68 @@
     loadShows();
     renderHome();
 
-    // ===== 로컬스토리지 관련 함수 =====
+    // ===== LocalStorage 관리 =====
     function loadShows() {
-      const savedShows = localStorage.getItem('casting_shows');
-      if (savedShows) {
-        shows = JSON.parse(savedShows);
+      const saved = localStorage.getItem('castingShows');
+      if (saved) {
+        shows = JSON.parse(saved);
       }
     }
 
     function saveShows() {
-      localStorage.setItem('casting_shows', JSON.stringify(shows));
+      localStorage.setItem('castingShows', JSON.stringify(shows));
     }
 
     // ===== 홈 화면 렌더링 =====
     function renderHome() {
-      console.log('renderHome called');
       const showsArray = Object.entries(shows);
-      console.log('Shows array:', showsArray);
-      
+      const addShowButton = document.getElementById('addShowButton');
+
       if (showsArray.length === 0) {
-        showsList.innerHTML = '';
         emptyState.classList.remove('hidden');
+        showsList.classList.add('hidden');
+        addShowButton.classList.add('hidden');
       } else {
         emptyState.classList.add('hidden');
-        showsList.innerHTML = showsArray.map(([id, show]) => `
-          <div class="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-teal-700/50 transition-all cursor-pointer group show-card"
-               data-show-id="${id}">
-            <div class="flex items-start justify-between mb-4">
-              <div class="flex-1">
-                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
-                  ${show.name}
-                </h3>
-                <p class="text-sm text-zinc-500">
-                  총 ${show.data.schedule.length}회 공연
-                </p>
-              </div>
+        showsList.classList.remove('hidden');
+        addShowButton.classList.remove('hidden');
+
+        showsList.innerHTML = showsArray.map(([showId, show]) => `
+          <div class="bg-zinc-900/50 border-2 border-zinc-800 hover:border-teal-700/50 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg hover:shadow-teal-700/20"
+            onclick="viewShow('${showId}')">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-xl font-black text-white">${show.name}</h3>
               <button 
                 class="delete-show-btn p-2 hover:bg-red-900/30 rounded-lg transition-colors"
-                data-show-id="${id}">
-                <svg class="w-5 h-5 text-zinc-600 hover:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                data-show-id="${showId}">
+                <svg class="w-5 h-5 text-zinc-600 hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </button>
             </div>
-            
-            <div class="flex flex-wrap gap-2 mb-4">
-              ${show.data.roles.slice(0, 3).map(role => `
-                <span class="px-3 py-1 bg-teal-500/10 text-teal-400 text-sm font-semibold rounded-full">
-                  ${role}
-                </span>
-              `).join('')}
-              ${show.data.roles.length > 3 ? `
-                <span class="px-3 py-1 bg-zinc-800 text-zinc-400 text-sm font-semibold rounded-full">
-                  +${show.data.roles.length - 3}
-                </span>
-              ` : ''}
-            </div>
-            
-            <div class="flex items-center gap-2 text-zinc-500 text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              ${show.data.schedule[0]?.date} ~ ${show.data.schedule[show.data.schedule.length - 1]?.date}
+            <div class="space-y-2 text-sm text-zinc-400">
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>총 ${show.data.schedule.length}회 공연</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>${show.data.roles.join(', ')}</span>
+              </div>
             </div>
           </div>
         `).join('');
 
-        // 이벤트 리스너 추가
         setTimeout(() => {
-          console.log('Adding event listeners');
-          
-          const cards = document.querySelectorAll('.show-card');
-          const deleteButtons = document.querySelectorAll('.delete-show-btn');
-          
-          console.log('Found cards:', cards.length);
-          console.log('Found delete buttons:', deleteButtons.length);
-          
-          cards.forEach(card => {
-            card.addEventListener('click', (e) => {
-              if (!e.target.closest('.delete-show-btn')) {
-                const showId = card.dataset.showId;
-                console.log('Card clicked, showId:', showId);
-                viewShow(showId);
-              }
-            });
-          });
-
-          deleteButtons.forEach(btn => {
-            console.log('Adding listener to button with ID:', btn.dataset.showId);
+          document.querySelectorAll('.delete-show-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-              console.log('Delete button clicked!');
               e.stopPropagation();
               e.preventDefault();
               const showId = btn.dataset.showId;
@@ -635,7 +604,7 @@
       dataSection.classList.add('hidden');
       currentShowId = null;
       castingData = null;
-      selectedActor = null;
+      selectedActors = [];
       renderHome();
     }
 
@@ -656,6 +625,13 @@
       dataSection.classList.add('hidden');
 
       // 데이터 입력
+      if (currentShowId && shows[currentShowId]) {
+        // 수정 모드: 기존 공연명 표시
+        showNameEditInput.value = shows[currentShowId].name;
+      } else {
+        // 새 공연 추가 모드: 빈 값
+        showNameEditInput.value = '';
+      }
       rolesInput.value = tempCastingData.roles.join(', ');
       noteInput.value = tempCastingData.note || '';
       renderScheduleEditTable();
@@ -746,92 +722,132 @@
       }
     });
 
-    // ===== 예시 데이터 로드 =====
-    function loadSampleData() {
-      tempCastingData = {
-        "roles": ["엘사", "안나", "크리스토프"],
-        "schedule": [
-          {
-            "date": "03.15 (금)",
-            "day": "금",
-            "time": "14:00",
-            "cast": ["김민수", "이지은", "박서준"]
-          },
-          {
-            "date": "03.15 (금)",
-            "day": "금",
-            "time": "19:00",
-            "cast": ["최우식", "이지은", "정해인"]
-          },
-          {
-            "date": "03.16 (토)",
-            "day": "토",
-            "time": "14:00",
-            "cast": ["김민수", "아이유", "박서준"]
-          },
-          {
-            "date": "03.16 (토)",
-            "day": "토",
-            "time": "19:00",
-            "cast": ["최우식", "아이유", "정해인"]
-          },
-          {
-            "date": "03.17 (일)",
-            "day": "일",
-            "time": "15:00",
-            "cast": ["김민수", "이지은", "정해인"]
-          },
-          {
-            "date": "03.17 (일)",
-            "day": "일",
-            "time": "19:00",
-            "cast": ["최우식", "아이유", "박서준"]
-          },
-          {
-            "date": "03.18 (월)",
-            "day": "월",
-            "time": "14:00",
-            "cast": ["김민수", "이지은", "박서준"]
-          },
-          {
-            "date": "03.18 (월)",
-            "day": "월",
-            "time": "19:00",
-            "cast": ["최우식", "아이유", "정해인"]
-          }
-        ],
-        "note": "예시 데이터입니다."
-      };
+    // ===== 🆕 추가 스케줄 업로드 기능 =====
+    function addMoreSchedule() {
+      if (!currentShowId) {
+        alert('공연을 먼저 선택해주세요.');
+        return;
+      }
+      
+      // 파일 선택 트리거
+      const additionalFileInput = document.createElement('input');
+      additionalFileInput.type = 'file';
+      additionalFileInput.accept = 'image/*';
+      additionalFileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
 
-      showConfirmSection();
+        if (!file.type.startsWith('image/')) {
+          alert('이미지 파일만 업로드할 수 있습니다.');
+          return;
+        }
+
+        // 로딩 화면 표시
+        dataSection.classList.add('hidden');
+        loadingSection.classList.remove('hidden');
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64Data = e.target.result.split(',')[1];
+          await processAdditionalImage(base64Data);
+        };
+        reader.readAsDataURL(file);
+      };
+      additionalFileInput.click();
     }
 
-    // ===== 파일 업로드 (기존 API 방식 유지) =====
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) handleFileUpload(file);
-    });
+    // 추가 이미지 처리
+    async function processAdditionalImage(imageData) {
+      try {
+        const response = await fetch("/api/analyze", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imageData: imageData
+          })
+        });
 
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error Response:", errorData);
+          throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log("API Response:", data);
+
+        if (!data.content || !Array.isArray(data.content)) {
+          throw new Error("응답 형식이 올바르지 않습니다.");
+        }
+
+        if (data.stop_reason === "max_tokens") {
+          throw new Error("응답이 너무 길어 중간에 잘렸습니다. 이미지를 분할하여 업로드해주세요.");
+        }
+
+        const text = data.content.map(item => item.text || "").join("\n").trim();
+        const cleanText = text.replace(/```json|```/g, "").trim();
+        const newCastingData = JSON.parse(cleanText);
+
+        // 기존 스케줄에 새 스케줄 추가
+        if (newCastingData.schedule && newCastingData.schedule.length > 0) {
+          shows[currentShowId].data.schedule = [
+            ...shows[currentShowId].data.schedule,
+            ...newCastingData.schedule
+          ];
+          
+          saveShows();
+          
+          loadingSection.classList.add('hidden');
+          alert(`${newCastingData.schedule.length}개의 일정이 추가되었습니다!`);
+          
+          // 화면 새로고침
+          viewShow(currentShowId);
+        } else {
+          throw new Error("새로운 일정을 찾을 수 없습니다.");
+        }
+      } catch (error) {
+        console.error("Processing error:", error);
+        alert(`이미지 처리 중 오류가 발생했습니다.\n\n에러: ${error.message}\n\n개발자 콘솔을 확인해주세요.`);
+        loadingSection.classList.add('hidden');
+        viewShow(currentShowId); // 원래 화면으로 복귀
+      }
+    }
+
+    // ===== 드래그 앤 드롭 =====
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
-      dropZone.classList.add('border-teal-500', 'bg-teal-500/10', 'scale-105');
+      dropZone.classList.add('border-teal-400', 'bg-teal-500/20');
     });
 
     dropZone.addEventListener('dragleave', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-teal-500', 'bg-teal-500/10', 'scale-105');
+      dropZone.classList.remove('border-teal-400', 'bg-teal-500/20');
     });
 
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
-      dropZone.classList.remove('border-teal-500', 'bg-teal-500/10', 'scale-105');
+      dropZone.classList.remove('border-teal-400', 'bg-teal-500/20');
+
       const file = e.dataTransfer.files[0];
-      if (file) handleFileUpload(file);
+      if (file && file.type.startsWith('image/')) {
+        handleFile(file);
+      } else {
+        alert('이미지 파일만 업로드할 수 있습니다.');
+      }
     });
 
-    async function handleFileUpload(file) {
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        handleFile(file);
+      }
+    }
+
+    function handleFile(file) {
       if (!file.type.startsWith('image/')) {
-        alert('이미지 파일만 업로드 가능합니다.');
+        alert('이미지 파일만 업로드할 수 있습니다.');
         return;
       }
 
@@ -1007,6 +1023,13 @@
 
     // ===== 저장 진행 =====
     function proceedToSave() {
+      // 공연명 확인
+      const showName = showNameEditInput.value.trim();
+      if (!showName) {
+        alert('공연명을 입력해주세요.');
+        return;
+      }
+
       // 역할 업데이트
       const rolesText = rolesInput.value.trim();
       if (!rolesText) {
@@ -1024,45 +1047,15 @@
       // 특이사항 업데이트
       tempCastingData.note = noteInput.value.trim();
 
-      // 공연명 입력 모달 표시
-      confirmSection.classList.add('hidden');
-      showSaveModal();
-    }
-
-    function showSaveModal() {
-      saveModal.classList.remove('hidden');
-      
-      // 수정 모드인 경우 기존 공연명 표시
-      if (currentShowId && shows[currentShowId]) {
-        showNameInput.value = shows[currentShowId].name;
-      } else {
-        showNameInput.value = '';
-      }
-      
-      showNameInput.focus();
-    }
-
-    function cancelSave() {
-      saveModal.classList.add('hidden');
-      confirmSection.classList.remove('hidden');
-    }
-
-    function confirmSave() {
-      const showName = showNameInput.value.trim();
-      if (!showName) {
-        alert('공연명을 입력해주세요.');
-        return;
-      }
-
-      // 수정 모드인 경우 기존 공연 업데이트
+      // 바로 저장
       if (currentShowId) {
+        // 수정 모드: 기존 공연 업데이트
         shows[currentShowId] = {
           name: showName,
           data: tempCastingData
         };
         
         saveShows();
-        saveModal.classList.add('hidden');
         tempCastingData = null;
         
         alert(`"${showName}" 공연이 수정되었습니다!`);
@@ -1076,7 +1069,6 @@
         };
         
         saveShows();
-        saveModal.classList.add('hidden');
         tempCastingData = null;
         
         alert(`"${showName}" 공연이 저장되었습니다!`);
@@ -1084,19 +1076,49 @@
       }
     }
 
-    // Enter 키로 저장
-    showNameInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        confirmSave();
-      }
-    });
-
     // ===== 기존 코드의 함수들 =====
     function processData() {
       const actorsSet = new Set();
+      
+      // '공연없음' 관련 키워드 목록 (대소문자 무시, 공백 무시)
+      const excludeKeywords = [
+        '공연없음',
+        '공연 없음',
+        '없음',
+        'x',
+        '-',
+        '휴무',
+        '공연x',
+        '공연 x'
+      ];
+      
       castingData.schedule.forEach(show => {
-        show.cast.forEach(actor => actorsSet.add(actor));
+        show.cast.forEach(actor => {
+          const cleanActor = actor.trim();
+          
+          // 빈 문자열 제외
+          if (!cleanActor) return;
+          
+          // 한 글자만 있는 경우 제외 (쉼표로 잘못 분리된 케이스)
+          // 예: "공,연,없,음" → ["공", "연", "없", "음"] 각각 제외
+          if (cleanActor.length === 1) {
+            console.log(`한 글자 배우 이름 제외: "${cleanActor}"`);
+            return;
+          }
+          
+          // 제외 키워드 체크 (대소문자 무시, 공백 제거하여 비교)
+          const normalizedActor = cleanActor.toLowerCase().replace(/\s+/g, '');
+          const shouldExclude = excludeKeywords.some(keyword => {
+            const normalizedKeyword = keyword.toLowerCase().replace(/\s+/g, '');
+            return normalizedActor === normalizedKeyword;
+          });
+          
+          if (!shouldExclude) {
+            actorsSet.add(cleanActor);
+          }
+        });
       });
+      
       allActors = Array.from(actorsSet).sort();
 
       actorStats = {};
@@ -1125,7 +1147,7 @@
         <button
           onclick="selectActor('${actor}')"
           class="px-4 py-2 rounded-md font-bold transition-all ${
-            selectedActor === actor
+            selectedActors.includes(actor)
               ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/30'
               : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
           }"
@@ -1136,26 +1158,37 @@
       `).join('');
     }
 
+    // 🆕 배우 중복 선택 기능
     function selectActor(actorName) {
-      selectedActor = selectedActor === actorName ? null : actorName;
+      const index = selectedActors.indexOf(actorName);
+      if (index > -1) {
+        // 이미 선택된 배우 - 제거
+        selectedActors.splice(index, 1);
+      } else {
+        // 새로운 배우 - 추가
+        selectedActors.push(actorName);
+      }
+      
       renderActorButtons(searchInput.value);
       renderTable();
       updateFilterUI();
     }
 
     function updateFilterUI() {
-      if (selectedActor) {
+      if (selectedActors.length > 0) {
         selectedActorBadge.classList.remove('hidden');
         filterHint.classList.add('hidden');
-        selectedActorName.textContent = selectedActor;
+        
+        // 선택된 배우들 표시
+        selectedActorsText.textContent = selectedActors.join(', ');
 
-        const count = castingData.schedule.filter(show =>
-          show.cast.includes(selectedActor)
-        ).length;
-        selectedActorCount.textContent = `(${count}회)`;
+        // 총 출연 횟수 계산
+        const totalCount = castingData.schedule.filter(show => {
+          return selectedActors.some(actor => show.cast.includes(actor));
+        }).length;
 
         showInfo.classList.remove('hidden');
-        showInfoText.textContent = `${selectedActor} 출연 일정: 총 ${count}회`;
+        showInfoText.textContent = `선택한 배우 출연 일정: 총 ${totalCount}회`;
 
         renderStats();
       } else {
@@ -1167,8 +1200,11 @@
     }
 
     function renderTable() {
-      const filteredSchedule = selectedActor ?
-        castingData.schedule.filter(show => show.cast.includes(selectedActor)) :
+      // 🆕 선택된 배우가 포함된 일정만 필터링
+      const filteredSchedule = selectedActors.length > 0 ?
+        castingData.schedule.filter(show => 
+          selectedActors.some(actor => show.cast.includes(actor))
+        ) :
         castingData.schedule;
 
       tableHead.innerHTML = `
@@ -1185,7 +1221,7 @@
       tableBody.innerHTML = filteredSchedule.map(show => `
         <tr class="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors">
           <td class="px-4 py-4 border-r border-zinc-800 bg-zinc-900/30 whitespace-nowrap text-center">
-            <div class="text-base font-black ${show.date}">${show.date}</div>
+            <div class="text-base font-black">${show.date}</div>
           </td>
           <td class="px-4 py-4 border-r border-zinc-800 bg-zinc-900/30 whitespace-nowrap text-center">
             <div class="text-base font-semibold text-zinc-300">${show.day}</div>
@@ -1195,7 +1231,8 @@
           </td>
           ${show.cast.map((actor, castIdx) => `
             <td class="px-4 py-4 text-center border-r border-zinc-800 last:border-r-0 transition-all table-cell-highlight whitespace-nowrap ${
-              isActorInShow(show, castIdx) ? 'active bg-teal-500/30 font-black text-teal-300 ring-2 ring-inset ring-teal-500/50' : 'text-zinc-300 font-semibold'
+              isActorInShow(show, castIdx) ?
+                'active bg-teal-500/30 font-black text-teal-300 ring-2 ring-inset ring-teal-500/50' : 'text-zinc-300 font-semibold'
             }">
               <button onclick="selectActor('${actor}')" class="hover:text-teal-400 transition-colors w-full">
                 ${actor}
@@ -1206,30 +1243,47 @@
       `).join('');
     }
 
+    // 🆕 선택된 배우 중 하나라도 포함되면 하이라이트
     function isActorInShow(show, roleIndex) {
-      return selectedActor && show.cast[roleIndex] === selectedActor;
+      const actorAtRole = show.cast[roleIndex];
+      return selectedActors.includes(actorAtRole);
     }
 
     function renderStats() {
-      const filteredSchedule = castingData.schedule.filter(show =>
-        show.cast.includes(selectedActor)
-      );
+      if (selectedActors.length === 0) {
+        statsSection.classList.add('hidden');
+        return;
+      }
+
+      // 각 배우별 통계 생성
+      const statsHTML = selectedActors.map(actor => {
+        const actorSchedule = castingData.schedule.filter(show => show.cast.includes(actor));
+        
+        return `
+          <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6">
+            <div class="text-center mb-4">
+              <h4 class="text-lg font-bold text-white">${actor}</h4>
+            </div>
+            <div class="space-y-3">
+              <div class="flex justify-between items-center">
+                <span class="text-zinc-400 text-sm">총 출연 횟수</span>
+                <span class="text-2xl font-black text-teal-400">${actorSchedule.length}회</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-zinc-400 text-sm">첫 공연</span>
+                <span class="text-sm font-semibold text-white">${actorSchedule[0]?.date} ${actorSchedule[0]?.time}</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-zinc-400 text-sm">마지막 공연</span>
+                <span class="text-sm font-semibold text-white">${actorSchedule[actorSchedule.length - 1]?.date} ${actorSchedule[actorSchedule.length - 1]?.time}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
 
       statsSection.classList.remove('hidden');
-      statsSection.innerHTML = `
-        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
-          <div class="text-zinc-400 text-sm font-semibold mb-2">총 출연 횟수</div>
-          <div class="text-3xl font-black text-teal-400">${filteredSchedule.length}회</div>
-        </div>
-        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
-          <div class="text-zinc-400 text-sm font-semibold mb-2">첫 공연</div>
-          <div class="text-xl font-black text-white">${filteredSchedule[0]?.date} ${filteredSchedule[0]?.time}</div>
-        </div>
-        <div class="bg-zinc-900/50 border border-zinc-800 rounded-lg p-6 text-center">
-          <div class="text-zinc-400 text-sm font-semibold mb-2">마지막 공연</div>
-          <div class="text-xl font-black text-white">${filteredSchedule[filteredSchedule.length - 1]?.date} ${filteredSchedule[filteredSchedule.length - 1]?.time}</div>
-        </div>
-      `;
+      statsSection.innerHTML = statsHTML;
     }
 
     searchInput.addEventListener('input', (e) => {
@@ -1237,11 +1291,52 @@
     });
 
     clearFilterBtn.addEventListener('click', () => {
-      selectedActor = null;
+      selectedActors = [];
       renderActorButtons(searchInput.value);
       renderTable();
       updateFilterUI();
     });
+
+    // ===== 예시 데이터 로드 =====
+    function loadSampleData(event) {
+      if (event) {
+        event.stopPropagation();
+      }
+      
+      tempCastingData = {
+        "roles": ["엘사", "안나", "크리스토프"],
+        "schedule": [
+          {
+            "date": "03.15 (금)",
+            "day": "금",
+            "time": "14:00",
+            "cast": ["김민수", "이지은", "박서준"]
+          },
+          {
+            "date": "03.15 (금)",
+            "day": "금",
+            "time": "19:00",
+            "cast": ["최수진", "이지은", "공연없음"]
+          },
+          {
+            "date": "03.16 (토)",
+            "day": "토",
+            "time": "14:00",
+            "cast": ["김민수", "정하은", "박서준"]
+          },
+          {
+            "date": "03.16 (토)",
+            "day": "토",
+            "time": "19:00",
+            "cast": ["최수진", "정하은", "강민호"]
+          }
+        ],
+        "note": "※ 일정은 변경될 수 있습니다."
+      };
+
+      uploadSection.classList.add('hidden');
+      showConfirmSection();
+    }
   </script>
 </body>
 
