@@ -643,9 +643,13 @@
       currentShowId = showId;
       castingData = shows[showId].data;
       currentShowTitle.textContent = shows[showId].name;
-      
+
+      selectedActors = [];
+      searchInput.value = '';
+
       processData();
       showData();
+      updateFilterUI();
       
       homeSection.classList.add('hidden');
       uploadSection.classList.add('hidden');
