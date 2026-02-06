@@ -70,7 +70,10 @@
     <header class="border-b border-teal-700/30 bg-zinc-950/50 backdrop-blur-sm">
       <div class="max-w-7xl mx-auto px-6 py-8">
         <div class="text-center">
-          <h1 class="text-5xl md:text-6xl font-black mb-3 tracking-tight">
+          <h1
+          class="text-5xl md:text-6xl font-black mb-4 tracking-tight cursor-pointer transition-colors"
+          onclick="showHomeSection()"
+          >
             캐스팅 스케줄 자동 관리
           </h1>
           <p class="text-zinc-400 text-lg font-medium">AI Casting Schedule Manager</p>
@@ -83,7 +86,7 @@
       <!-- 홈 화면 -->
       <div id="homeSection">
         <div class="mb-8 flex items-center justify-between">
-          <h2 class="text-3xl font-black text-white">📋 내 공연 리스트</h2>
+          <h2 class="text-3xl font-bold text-white">📋 내 공연 리스트</h2>
         </div>
 
         <!-- 공연 리스트 -->
@@ -110,7 +113,7 @@
         </div>
 
         <!-- 하단 버튼 (공연이 있을 때만 표시) -->
-        <div id="addShowButton" class="hidden flex justify-center mt-6">
+        <div id="addShowButton" class="hidden flex justify-center mt-16 mb-24">
           <button onclick="showUploadSection()" class="inline-flex items-center gap-3 px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -144,7 +147,7 @@
                 </svg>
               </div>
               <div>
-                <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 보드 이미지 업로드</h3>
+                <h3 class="text-2xl font-semibold text-teal-400 mb-2">캐스팅 스케줄 이미지 업로드</h3>
                 <p class="text-zinc-400">클릭하거나 드래그하여 이미지를 선택하세요</p>
               </div>
               <div class="flex justify-center gap-4">
@@ -410,14 +413,24 @@
         </div>
 
         <!-- 새 스케줄 추가 버튼 -->
-        <div class="mt-8 text-center">
+        <div class="mt-16 mb-24 text-center">
           <button onclick="addMoreSchedule()"
-            class="px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-teal-600/30 hover:shadow-teal-500/50 transition-all hover:scale-105 inline-flex items-center gap-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+            class="px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold rounded-xl shadow-lg shadow-teal-600/30 hover:shadow-teal-500/50 transition-all hover:scale-105 inline-flex items-center gap-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-6"> 
+              <path stroke-linecap="round" stroke-linejoin="round" 
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" /> 
             </svg>
-            <span>새로운 스케줄이 올라왔나요? 이미지 업로드하기</span>
+
+        <!-- 텍스트 (두 줄+중앙정렬)-->
+         <div class="flex flex-col items-center text-center gap-1">
+            <span class="font-bold text-base leading-snug">
+              새로운 스케줄이 올라왔나요?
+            </span>
+            <span class="text-sm font-normal opacity-90">
+              이미지 업로드하기
+            </span>
+          </div>
+          
           </button>
         </div>
 
@@ -643,9 +656,8 @@
       currentShowId = showId;
       castingData = shows[showId].data;
       currentShowTitle.textContent = shows[showId].name;
-
-      selectedActors = [];
-      searchInput.value = '';
+      
+      selectedActors = []; //배우선택 초기화
 
       processData();
       showData();
@@ -913,42 +925,54 @@
       }
     }
 
-    // 🆕 첫공/막공 처리 함수
-    function processFirstLastShow(data) {
-      if (!data.schedule || data.schedule.length === 0) return;
+   // 🆕 첫공/막공 처리 함수
+function processFirstLastShow(data) {
+  if (!data.schedule || data.schedule.length === 0) return;
 
-      // 날짜별로 정렬
-      const sortedSchedule = [...data.schedule].sort((a, b) => {
-        const dateA = parseDateString(a.date);
-        const dateB = parseDateString(b.date);
-        return dateA - dateB;
+  // 한글 이름 검증 함수
+  function isValidKoreanName(name) {
+    const koreanRegex = /^[가-힣]+$/;
+    return koreanRegex.test(name);
+  }
+
+  // 날짜별로 정렬
+  const sortedSchedule = [...data.schedule].sort((a, b) => {
+    const dateA = parseDateString(a.date);
+    const dateB = parseDateString(b.date);
+    return dateA - dateB;
+  });
+
+  const firstShowDate = sortedSchedule[0].date;
+  const lastShowDate = sortedSchedule[sortedSchedule.length - 1].date;
+
+  // 각 스케줄의 배우 이름에서 동그라미 확인 및 제거
+  data.schedule.forEach(show => {
+    show.cast = show.cast
+      .map(actorName => {
+        // 동그라미와 특수 기호 제거
+        const cleanName = actorName.replace(/[●○•◉◎⑩㊗]+/g, '').trim();
+        
+        return cleanName;
+      })
+      .filter(cleanName => {
+        // 한글 이름만 남기기
+        return isValidKoreanName(cleanName) && cleanName.length > 1;
+      })
+      .map(cleanName => {
+        // 첫공/막공 태그 추가
+        if (show.date === firstShowDate) {
+          return `${cleanName} (첫공)`;
+        } else if (show.date === lastShowDate) {
+          return `${cleanName} (막공)`;
+        }
+        
+        return cleanName;
       });
+  });
 
-      const firstShowDate = sortedSchedule[0].date;
-      const lastShowDate = sortedSchedule[sortedSchedule.length - 1].date;
-
-      // 각 스케줄의 배우 이름에서 동그라미 확인 및 제거
-      data.schedule.forEach(show => {
-        show.cast = show.cast.map(actorName => {
-          const circlePattern = /[●○•◉◎]/g;
-          const hasCircle = circlePattern.test(actorName);
-          
-          // 동그라미 제거한 깨끗한 이름
-          const cleanName = actorName.replace(circlePattern, '').trim();
-          
-          // 동그라미가 있었다면 첫공/막공 태그 추가
-          if (hasCircle) {
-            if (show.date === firstShowDate) {
-              return `${cleanName} (첫공)`;
-            } else if (show.date === lastShowDate) {
-              return `${cleanName} (막공)`;
-            }
-          }
-          
-          return cleanName;
-        });
-      });
-    }
+  // 빈 캐스트 제거
+  data.schedule = data.schedule.filter(show => show.cast.length > 0);
+}
 
     // 날짜 문자열을 Date 객체로 변환하는 헬퍼 함수
     function parseDateString(dateStr) {
@@ -1148,7 +1172,7 @@
           if (!cleanActor) return;
           
           // 🆕 동그라미(●, ○, •) 제거
-          cleanActor = cleanActor.replace(/[●○•◉◎]/g, '').trim();
+          cleanActor = cleanActor.replace(/[●○•◉◎⑩]/g, '').trim();
           
           // 🆕 (첫공), (막공) 태그 제거
           cleanActor = cleanActor.replace(/\s*\(첫공\)/g, '').replace(/\s*\(막공\)/g, '').trim();
@@ -1178,7 +1202,7 @@
           show.cast.some(castActor => {
             // 🆕 동그라미와 태그 제거 후 비교
             const cleanCastActor = castActor
-              .replace(/[●○•◉◎]/g, '')
+              .replace(/[●○•◉◎⑩]/g, '')
               .replace(/\s*\(첫공\)/g, '')
               .replace(/\s*\(막공\)/g, '')
               .trim();
@@ -1189,33 +1213,64 @@
     }
 
     function showData() {
-      renderActorButtons();
-      renderTable();
+  renderActorButtons();
+  renderTable();
 
-      if (castingData.note) {
-        scheduleNote.textContent = castingData.note;
+  if (castingData.note) {
+    scheduleNote.textContent = castingData.note;
+  }
+}
+
+function renderActorButtons(searchQuery = '') {
+  // 현재 공연의 실제 배우 목록만 추출
+  const currentShowActors = new Set();
+  castingData.schedule.forEach(show => {
+    show.cast.forEach(actor => {
+      let cleanActor = actor
+        .replace(/[●○•◉◎⑩]/g, '') // 동그라미 제거
+        .replace(/\s*\(첫공\)/g, '') // 첫공 태그 제거
+        .replace(/\s*\(막공\)/g, '') // 막공 태그 제거
+        .trim();
+      
+      // 한글 이름 검증 추가
+      const koreanRegex = /^[가-힣]+$/;
+
+      // 추가: 공연없음, 없음 등의 키워드 제외
+      const excludeKeywords = [
+        '공연없음', '공연 없음', '없음', 
+        'x', '-', '휴무', '공연x', '공연 x'
+       ];
+
+
+      if (
+        cleanActor && 
+        cleanActor.length > 1 && 
+        koreanRegex.test(cleanActor) &&
+        !excludeKeywords.includes(cleanActor)
+      ) {
+        currentShowActors.add(cleanActor);
       }
-    }
+    });
+  });
 
-    function renderActorButtons(searchQuery = '') {
-      const filteredActors = allActors.filter(actor =>
-        actor.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+  const filteredActors = Array.from(currentShowActors)
+    .filter(actor => actor.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort();
 
-      actorButtons.innerHTML = filteredActors.map(actor => `
-        <button
-          onclick="selectActor('${actor}')"
-          class="px-4 py-2 rounded-md font-bold transition-all ${
-            selectedActors.includes(actor)
-              ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/30'
-              : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
-          }"
-        >
-          ${actor}
-          <span class="ml-2 text-xs font-semibold opacity-70">(${actorStats[actor]})</span>
-        </button>
-      `).join('');
-    }
+  actorButtons.innerHTML = filteredActors.map(actor => `
+    <button
+      onclick="selectActor('${actor}')"
+      class="px-4 py-2 rounded-md font-bold transition-all ${
+        selectedActors.includes(actor)
+          ? 'bg-teal-500 text-white shadow-lg shadow-teal-500/30'
+          : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700 border border-zinc-700'
+      }"
+    >
+      ${actor}
+      <span class="ml-2 text-xs font-semibold opacity-70">(${actorStats[actor] || 0})</span>
+    </button>
+  `).join('');
+}
 
     function selectActor(actorName) {
       const index = selectedActors.indexOf(actorName);
@@ -1243,7 +1298,7 @@
             return show.cast.some(castActor => {
               // 🆕 동그라미와 태그 제거 후 비교
               const cleanCastActor = castActor
-                .replace(/[●○•◉◎]/g, '')
+                .replace(/[●○•◉◎⑩]/g, '')
                 .replace(/\s*\(첫공\)/g, '')
                 .replace(/\s*\(막공\)/g, '')
                 .trim();
@@ -1272,7 +1327,7 @@
             return show.cast.some(castActor => {
               // 🆕 동그라미와 태그 제거 후 비교
               const cleanCastActor = castActor
-                .replace(/[●○•◉◎]/g, '')
+                .replace(/[●○•◉◎⑩]/g, '')
                 .replace(/\s*\(첫공\)/g, '')
                 .replace(/\s*\(막공\)/g, '')
                 .trim();
@@ -1309,7 +1364,7 @@
               isActorInShow(show, castIdx) ?
                 'active bg-teal-500/30 font-black text-teal-300 ring-2 ring-inset ring-teal-500/50' : 'text-zinc-300 font-semibold'
             }">
-              <button onclick="selectActor('${actor.replace(/[●○•◉◎]/g, '').replace(/\s*\(첫공\)/g, '').replace(/\s*\(막공\)/g, '').trim()}')" class="hover:text-teal-400 transition-colors w-full">
+              <button onclick="selectActor('${actor.replace(/[●○•◉◎⑩]/g, '').replace(/\s*\(첫공\)/g, '').replace(/\s*\(막공\)/g, '').trim()}')" class="hover:text-teal-400 transition-colors w-full">
                 ${actor}
               </button>
             </td>
@@ -1323,7 +1378,7 @@
       const actorAtRole = show.cast[roleIndex];
       // 🆕 동그라미와 태그 제거 후 비교
       const cleanActorAtRole = actorAtRole
-        .replace(/[●○•◉◎]/g, '')
+        .replace(/[●○•◉◎⑩]/g, '')
         .replace(/\s*\(첫공\)/g, '')
         .replace(/\s*\(막공\)/g, '')
         .trim();
