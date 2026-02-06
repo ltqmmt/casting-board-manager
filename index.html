@@ -113,7 +113,7 @@
         </div>
 
         <!-- 하단 버튼 (공연이 있을 때만 표시) -->
-        <div id="addShowButton" class="hidden flex justify-center mt-16 mb-24">
+        <div id="addShowButton" class="hidden justify-center mt-16 mb-24">
           <button onclick="showUploadSection()" class="inline-flex items-center gap-3 px-8 py-4 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-teal-500/20 hover:shadow-teal-500/40 hover:scale-105">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -376,7 +376,7 @@
             </div>
 
             <div id="selectedActorBadge"
-              class="hidden flex items-center gap-2 px-4 py-2 bg-teal-500/20 border border-teal-500 rounded-md">
+              class="hidden items-center gap-2 px-4 py-2 bg-teal-500/20 border border-teal-500 rounded-md">
               <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -561,10 +561,12 @@
         emptyState.classList.remove('hidden');
         showsList.classList.add('hidden');
         addShowButton.classList.add('hidden');
+        addShowButton.classList.remove('flex');
       } else {
         emptyState.classList.add('hidden');
         showsList.classList.remove('hidden');
         addShowButton.classList.remove('hidden');
+        addShowButton.classList.add('flex');
 
         showsList.innerHTML = showsArray.map(([showId, show]) => `
           <div class="bg-zinc-900/50 border-2 border-zinc-800 hover:border-teal-700/50 rounded-xl p-6 cursor-pointer transition-all hover:shadow-lg hover:shadow-teal-700/20"
@@ -1289,8 +1291,9 @@ function renderActorButtons(searchQuery = '') {
     function updateFilterUI() {
       if (selectedActors.length > 0) {
         selectedActorBadge.classList.remove('hidden');
+        selectedActorBadge.classList.add('flex');
         filterHint.classList.add('hidden');
-        
+
         selectedActorsText.textContent = selectedActors.join(', ');
 
         const totalCount = castingData.schedule.filter(show => {
@@ -1313,6 +1316,7 @@ function renderActorButtons(searchQuery = '') {
         renderStats();
       } else {
         selectedActorBadge.classList.add('hidden');
+        selectedActorBadge.classList.remove('flex');
         filterHint.classList.remove('hidden');
         showInfo.classList.add('hidden');
         statsSection.classList.add('hidden');
