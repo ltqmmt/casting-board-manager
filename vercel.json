@@ -4,6 +4,12 @@
     "api/analyze.js": {
       "maxDuration": 60,
       "memory": 1024
+    },
+    "api/shows/index.js": {
+      "maxDuration": 10
+    },
+    "api/shows/[id].js": {
+      "maxDuration": 10
     }
   }
 }
