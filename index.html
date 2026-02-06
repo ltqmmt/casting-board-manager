@@ -1004,24 +1004,40 @@ function processFirstLastShow(data) {
       
       tempCastingData.schedule.forEach(show => {
         show.cast = show.cast.map(actor => {
-          if (actor.trim() === findName) {
-            replacedCount++;
-            return replaceName;
-          }
-          return actor;
-        });
-      });
-      
-      if (replacedCount > 0) {
-        alert(`"${findName}"을(를) "${replaceName}"(으)로 ${replacedCount}개 항목 변경했습니다.`);
-        renderScheduleEditTable();
-        
-        document.getElementById('findActorInput').value = '';
-        document.getElementById('replaceActorInput').value = '';
-      } else {
-        alert(`"${findName}" 이름을 찾을 수 없습니다.`);
+      // 태그 분리
+      const hasFirst = actor.includes('(첫공)');
+      const hasLast = actor.includes('(막공)');
+
+      // 이름만 추출
+      const cleanName = actor
+        .replace(/\s*\(첫공\)/g, '')
+        .replace(/\s*\(막공\)/g, '')
+        .trim();
+
+      if (cleanName === findName) {
+        replacedCount++;
+
+        let newName = replaceName;
+        if (hasFirst) newName += ' (첫공)';
+        if (hasLast) newName += ' (막공)';
+
+        return newName;
       }
-    }
+
+      return actor;
+    });
+  });
+
+  if (replacedCount > 0) {
+    alert(`"${findName}" → "${replaceName}" (${replacedCount}건 변경됨)`);
+    renderScheduleEditTable();
+
+    document.getElementById('findActorInput').value = '';
+    document.getElementById('replaceActorInput').value = '';
+  } else {
+    alert(`"${findName}" 이름을 찾을 수 없습니다.`);
+  }
+}
 
     // ===== 일정 수정 테이블 렌더링 =====
     function renderScheduleEditTable() {
